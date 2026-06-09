@@ -1,0 +1,6 @@
+apiVersion: v2
+name: kafka-mongo-pipeline
+description: Kafka-to-MongoDB ELT event processing pipeline for northwind
+type: application
+version: 0.1.0
+appVersion: "latest"

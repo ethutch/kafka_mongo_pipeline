@@ -1,0 +1,45 @@
+replicaCount: 1
+
+image:
+  repository: kafka-mongo-pipeline
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+serviceAccount:
+  create: true
+  name: ""
+
+podAnnotations: {}
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 200m
+    memory: 256Mi
+
+config:
+  logLevel: DEBUG
+  batchSize: 100
+  batchTimeoutMs: 50000
+  deadLetterTopic: northwind.elt.events.dlq
+  supportedCustomerEvents: "[4,9]"
+  supportedOrderEvents: "[7]"
+  kafka:
+    bootstrapServers: host.docker.internal:9092
+    topics: customer-events,order-events
+    groupId: northwind-prod-elt-consumer-group
+    autoOffsetReset: earliest
+    securityProtocol: PLAINTEXT
+    sessionTimeoutMs: 30000
+    maxPollIntervalMs: 300000
+    enableAutoCommit: "false"
+  mongodb:
+    uri: mongodb://admin:passw0rd!@host.docker.internal:27017/?authSource=admin
+    database: northwind
+    collection: customers
+    maxPoolSize: 10
+    minPoolSize: 2
+    connectTimeoutMs: 10000
+    serverSelectionTimeoutMs: 5000

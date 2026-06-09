@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "kafka-mongo-pipeline.fullname" . }}
+  labels:
+    {{- include "kafka-mongo-pipeline.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "kafka-mongo-pipeline.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "kafka-mongo-pipeline.selectorLabels" . | nindent 8 }}
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      serviceAccountName: {{ .Values.serviceAccount.name | default (include "kafka-mongo-pipeline.fullname" .) }}
+      containers:
+        - name: {{ include "kafka-mongo-pipeline.name" . }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "kafka-mongo-pipeline.fullname" . }}-config
+            - secretRef:
+                name: {{ include "kafka-mongo-pipeline.fullname" . }}-secret
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}

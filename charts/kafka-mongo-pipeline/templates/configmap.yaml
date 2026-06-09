@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "kafka-mongo-pipeline.fullname" . }}-config
+  labels:
+    {{- include "kafka-mongo-pipeline.labels" . | nindent 4 }}
+data:
+  LOG_LEVEL: {{ .Values.config.logLevel | quote }}
+  BATCH_SIZE: {{ .Values.config.batchSize | quote }}
+  BATCH_TIMEOUT_MS: {{ .Values.config.batchTimeoutMs | quote }}
+  DEAD_LETTER_TOPIC: {{ .Values.config.deadLetterTopic | quote }}
+  SUPPORTED_CUSTOMER_EVENTS: {{ .Values.config.supportedCustomerEvents | quote }}
+  SUPPORTED_ORDER_EVENTS: {{ .Values.config.supportedOrderEvents | quote }}
+
+  KAFKA_BOOTSTRAP_SERVERS: {{ .Values.config.kafka.bootstrapServers | quote }}
+  KAFKA_TOPICS: {{ .Values.config.kafka.topics | quote }}
+  KAFKA_GROUP_ID: {{ .Values.config.kafka.groupId | quote }}
+  KAFKA_AUTO_OFFSET_RESET: {{ .Values.config.kafka.autoOffsetReset | quote }}
+  KAFKA_SECURITY_PROTOCOL: {{ .Values.config.kafka.securityProtocol | quote }}
+  KAFKA_SESSION_TIMEOUT_MS: {{ .Values.config.kafka.sessionTimeoutMs | quote }}
+  KAFKA_MAX_POLL_INTERVAL_MS: {{ .Values.config.kafka.maxPollIntervalMs | quote }}
+  KAFKA_ENABLE_AUTO_COMMIT: {{ .Values.config.kafka.enableAutoCommit | quote }}
+
+  MONGODB_DATABASE: {{ .Values.config.mongodb.database | quote }}
+  MONGODB_COLLECTION: {{ .Values.config.mongodb.collection | quote }}
+  MONGODB_MAX_POOL_SIZE: {{ .Values.config.mongodb.maxPoolSize | quote }}
+  MONGODB_MIN_POOL_SIZE: {{ .Values.config.mongodb.minPoolSize | quote }}
+  MONGODB_CONNECT_TIMEOUT_MS: {{ .Values.config.mongodb.connectTimeoutMs | quote }}
+  MONGODB_SERVER_SELECTION_TIMEOUT_MS: {{ .Values.config.mongodb.serverSelectionTimeoutMs | quote }}

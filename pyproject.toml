@@ -1,0 +1,63 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kafka-mongo-pipeline"
+version = "1.0.0"
+description = "Enterprise Kafka → MongoDB pipeline service"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+dependencies = [
+    "kafka-python-ng>=2.2",
+    "pymongo>=4.17.0",
+    "pydantic-settings>=2.14.1",
+    "tenacity>=8.2.3",
+    "structlog>=24.1.0",
+    "protobuf>=7.34.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    # "types-pymongo~=4.17.0.0",
+    "pytest>=9.0",
+    "pytest-asyncio>=1.3.0",
+    "pytest-mock>=3.15.1",
+    "mongomock>=4.3.0",
+    "coverage>=7.14.0",
+    "ruff>=0.15.12",
+    "mypy>=2.1.0",
+]
+
+[project.scripts]
+pipeline = "kafka_mongo_pipeline.main:main"
+
+[tool.setuptools.packages.find]
+where = ["kafka_mongo_pipeline"]
+include = ["*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "UP", "ANN"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+addopts = "-v --tb=short --strict-markers --import-mode=importlib"
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+pythonpath = [ "kafka_mongo_pipeline" ]
+
+[tool.coverage.run]
+source = ["kafka_mongo_pipeline"]
+omit = ["*/tests/*"]

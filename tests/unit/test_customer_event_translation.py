@@ -1,8 +1,8 @@
-from datetime import datetime, timezone
+from datetime import UTC, datetime, timezone
 
 import pytest
 
-from models import CustomerEvent, ProcessingResult
+from kafka_mongo_pipeline.models import CustomerEvent
 
 
 @pytest.fixture
@@ -12,7 +12,7 @@ def us_customer_event() -> CustomerEvent:
         kafka_topic="customer-events",
         kafka_partition=0,
         kafka_offset=5000,
-        ingested_at=datetime(2026, 6, 7, 14, 13, 13, 681735, tzinfo=timezone.utc),
+        ingested_at=datetime(2026, 6, 7, 14, 13, 13, 681735, tzinfo=UTC),
         correlation_id="3dde64c1-ad87-47eb-85bc-ad19ae796ce0",
         action="CREATE",
         customer_id="ACME_001",
@@ -28,8 +28,8 @@ def us_customer_event() -> CustomerEvent:
         fax="(928) 555-4321",
         created_by="system_admin",
         updated_by="system_admin",
-        created_at=datetime(2026, 5, 28, 12, 24, 52, 144000, tzinfo=timezone.utc),
-        updated_at=datetime(2026, 5, 28, 12, 24, 52, 144000, tzinfo=timezone.utc)
+        created_at=datetime(2026, 5, 28, 12, 24, 52, 144000, tzinfo=UTC),
+        updated_at=datetime(2026, 5, 28, 12, 24, 52, 144000, tzinfo=UTC)
     )
 
 
@@ -42,26 +42,26 @@ def test_to_mongo_doc_exact_output(us_customer_event: CustomerEvent) -> None:
     expected_mongo_document = {
         "_id": "3dde64c1-ad87-47eb-85bc-ad19ae796ce0",
         "action": "CREATE",
-        "customer_id": "ACME_001",
-        "company_name": "Acme Corporation",
-        "contact_name": "Wile E. Coyote",
-        "contact_title": "Director of Engineering",
+        "customerId": "ACME_001",
+        "companyName": "Acme Corporation",
+        "contactName": "Wile E. Coyote",
+        "contactTitle": "Director of Engineering",
         "address": "123 Desert Road",
         "city": "Flagstaff",
         "region": "AZ",
-        "postal_code": "86001",
+        "postalCode": "86001",
         "country": "USA",
         "phone": "(928) 555-1234",
         "fax": "(928) 555-4321",
-        "created_by": "system_admin",
-        "updated_by": "system_admin",
-        "created_at": datetime(2026, 5, 28, 12, 24, 52, 144000, tzinfo=timezone.utc),
-        "updated_at": datetime(2026, 5, 28, 12, 24, 52, 144000, tzinfo=timezone.utc),
+        "createdBy": "system_admin",
+        "updatedBy": "system_admin",
+        "createdAt": datetime(2026, 5, 28, 12, 24, 52, 144000, tzinfo=timezone.utc),
+        "updatedAt": datetime(2026, 5, 28, 12, 24, 52, 144000, tzinfo=timezone.utc),
         "_meta": {
             "topic": "customer-events",
             "partition": 0,
             "offset": 5000,
-            "ingested_at": datetime(2026, 6, 7, 14, 13, 13, 681735, tzinfo=timezone.utc),
+            "ingestedAt": datetime(2026, 6, 7, 14, 13, 13, 681735, tzinfo=timezone.utc),
         }
     }
 

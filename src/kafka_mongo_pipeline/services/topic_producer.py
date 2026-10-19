@@ -3,8 +3,8 @@ from kafka import KafkaProducer
 from kafka.errors import KafkaError
 from kafka.producer.future import FutureRecordMetadata
 
-from config.settings import AppSettings
-from models import DeadLetterEvent
+from kafka_mongo_pipeline.config import AppSettings
+from kafka_mongo_pipeline.models import DeadLetterEvent
 
 log = structlog.get_logger()
 

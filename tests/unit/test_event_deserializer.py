@@ -1,14 +1,13 @@
 from unittest.mock import MagicMock
 
 import pytest
-from kafka.consumer.fetcher import ConsumerRecord  # type: ignore
+from kafka.consumer.fetcher import ConsumerRecord
 
-from models.customer_event import CustomerEvent
-from models.dead_letter_event import DeadLetterEvent
-from models.order_event import OrderEvent
+from kafka_mongo_pipeline.models.customer_event import CustomerEvent
+from kafka_mongo_pipeline.models.order_event import OrderEvent
 
 # Fixed: Using your correct absolute import path
-from services.event_deserializer import EventDeserializer
+from kafka_mongo_pipeline.services.event_deserializer import EventDeserializer
 
 # Raw wire data hex strings parsed cleanly into binary arrays
 ORDER_HEX = "".join('''

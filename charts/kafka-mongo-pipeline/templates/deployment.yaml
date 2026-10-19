@@ -22,7 +22,14 @@ spec:
       containers:
         - name: {{ include "kafka-mongo-pipeline.name" . }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - name: debug
+              containerPort: 5678
+              protocol: TCP
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: DEBUG
+              value: {{ .Values.debug | quote }}
           envFrom:
             - configMapRef:
                 name: {{ include "kafka-mongo-pipeline.fullname" . }}-config

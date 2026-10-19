@@ -39,13 +39,18 @@ pipeline {
             }
         }
 
-//        stage('Test') {
-//            steps {
-//                dir("${env.WORKSPACE}") {
-//                    sh 'pip install -e ".[dev]" && pytest'
-//                }
-//            }
-//        }
+        stage('Test') {
+            steps {
+                dir("${env.WORKSPACE}") {
+                    sh '''
+                        docker buildx build \
+                            --target test \
+                            --build-arg INSTALL_DEV=true \
+                            .
+                    '''
+                }
+            }
+        }
 
         stage('Docker Build') {
             steps {
@@ -53,6 +58,7 @@ pipeline {
                     sh """
                         docker buildx build \\
                             --load \\
+                            --build-arg INSTALL_DEV=true \\
                             -t ${IMAGE_NAME}:${VERSION} \\
                             .
                     """
@@ -67,6 +73,7 @@ pipeline {
                         helm upgrade --install ${HELM_RELEASE} ${HELM_CHART} \\
                             --namespace ${NAMESPACE} \\
                             --set image.tag=${VERSION} \\
+                            --set debug=true \\
                             --wait \\
                             --timeout 3m
                     """

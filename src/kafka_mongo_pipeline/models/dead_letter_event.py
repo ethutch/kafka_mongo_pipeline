@@ -1,6 +1,4 @@
-from pydantic import Field
-
-from models.processing_result import ProcessingResult
+from kafka_mongo_pipeline.models.processing_result import ProcessingResult
 
 
 class DeadLetterEvent(ProcessingResult):

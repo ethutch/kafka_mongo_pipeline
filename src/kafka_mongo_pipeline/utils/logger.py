@@ -6,7 +6,7 @@ import sys
 
 import structlog
 
-from config import settings
+from kafka_mongo_pipeline.config import settings
 
 settings = settings.get_settings()
 
@@ -49,4 +49,4 @@ def configure_logging(log_level: str = settings.log_level) -> None:
 
 def get_logger(name: str) -> structlog.stdlib.BoundLogger:
     """Return a bound structlog logger."""
-    return structlog.get_logger(name)
+    return structlog.get_logger(name) #type: ignore

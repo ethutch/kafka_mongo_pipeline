@@ -1,6 +1,7 @@
 """Application entry point — wires dependencies and starts the multi-topic consumer."""
 from __future__ import annotations
 
+import os
 import signal
 import sys
 from signal import Signals
@@ -8,18 +9,32 @@ from types import FrameType
 
 from kafka import KafkaConsumer  # python-kafka-ng
 
-from config.settings import get_settings
-from models import CustomerEvent, OrderEvent
-from services import (
+from kafka_mongo_pipeline.config.settings import get_settings
+from kafka_mongo_pipeline.models import CustomerEvent, OrderEvent
+from kafka_mongo_pipeline.services import (
     CustomerRepository,
     EventDeserializer,
     MongoManager,
     OrderRepository,
     TopicProducer,
 )
-from utils import configure_logging, get_logger
+from kafka_mongo_pipeline.utils import configure_logging, get_logger
 
 log = get_logger(__name__)
+
+
+# Check if we are in debug mode
+if os.environ.get("DEBUG") == "true":
+    import debugpy
+    # Listen on all interfaces inside the container on port 5678
+    debugpy.listen(("0.0.0.0", 5678))
+    print("⏳ Waiting for debugger attach on port 5678...", file=sys.stderr)
+    
+    # Optional: Pause execution until VS Code attaches
+    #debugpy.wait_for_client() 
+    
+    # Optional: Force a breakpoint right after attachment
+    # debugpy.breakpoint() 
 
 _running = False
 
@@ -69,7 +84,7 @@ def run_pipeline() -> None:
                 result = event_deserializer.process(message)
                 log.debug("Event deserialized", result_type=type(result).__name__, message=result.__repr__())
                 mongo_save_complete = False
-                if not result or not result.is_success:
+                if not result or not result.is_success():
                     topic_producer.publish(message)
                     log.warn("deserialization.failed", topic=message.topic, offset=message.offset)
                     continue

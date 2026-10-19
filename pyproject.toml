@@ -28,26 +28,28 @@ dev = [
     "coverage>=7.14.0",
     "ruff>=0.15.12",
     "mypy>=2.1.0",
+    "debugpy>=1.8.0",
 ]
 
 [project.scripts]
 pipeline = "kafka_mongo_pipeline.main:main"
 
 [tool.setuptools.packages.find]
-where = ["kafka_mongo_pipeline"]
-include = ["*"]
+where = ["src"]
+include = ["kafka_mongo_pipeline*"]
 
 [tool.ruff]
 line-length = 100
-target-version = "py311"
+target-version = "py313"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "N", "UP", "ANN"]
 
 [tool.mypy]
-python_version = "3.11"
+python_version = "3.13"
 strict = true
 ignore_missing_imports = true
+plugins = ["pydantic.mypy"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -56,7 +58,7 @@ addopts = "-v --tb=short --strict-markers --import-mode=importlib"
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
-pythonpath = [ "kafka_mongo_pipeline" ]
+pythonpath = ["src"]
 
 [tool.coverage.run]
 source = ["kafka_mongo_pipeline"]

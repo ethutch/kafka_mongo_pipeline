@@ -1,7 +1,6 @@
 """Application configuration — loaded from environment variables / .env file."""
 from __future__ import annotations
 
-import os
 from functools import lru_cache
 from typing import Annotated, Literal
 
@@ -93,7 +92,7 @@ class AppSettings(BaseSettings):
             return [int(x.strip()) for x in s.split(',') if x.strip()]
         raise TypeError(f"Cannot parse int list from value: {v!r}")
 
-
+    @classmethod
     def decode_list(cls, v: str | list[int] | None) -> list[int] | None:
         if v is None:
             return v

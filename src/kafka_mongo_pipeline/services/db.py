@@ -8,8 +8,8 @@ from tenacity import (
     wait_exponential,
 )
 
-from config.settings import MongoSettings
-from utils import get_logger
+from kafka_mongo_pipeline.config import MongoSettings
+from kafka_mongo_pipeline.utils import get_logger
 
 log = get_logger(__name__)
 
@@ -38,7 +38,7 @@ class MongoManager:
             minPoolSize=settings.min_pool_size,
             serverSelectionTimeoutMS=settings.server_selection_timeout_ms,
             connectTimeoutMS=settings.connect_timeout_ms,
-     )
+     ) #type: ignore
                                   
         self.db = self.client[settings.database]
         log.info("MongoDB connection pool initialized.")

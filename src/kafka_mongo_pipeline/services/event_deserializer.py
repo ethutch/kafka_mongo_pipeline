@@ -7,12 +7,12 @@ from typing import Any, NamedTuple
 
 from google.protobuf.json_format import MessageToDict
 from google.protobuf.message import Message
-from kafka.consumer.fetcher import ConsumerRecord  # type: ignore
+from kafka.consumer.fetcher import ConsumerRecord
 
-from config.settings import get_settings
-from models import CustomerEvent, DeadLetterEvent, OrderEvent, ProcessingResult
-from proto import customer_event_pb2, order_event_pb2
-from utils import get_logger
+from kafka_mongo_pipeline.config.settings import get_settings
+from kafka_mongo_pipeline.models import CustomerEvent, DeadLetterEvent, OrderEvent, ProcessingResult
+from kafka_mongo_pipeline.proto import customer_event_pb2, order_event_pb2
+from kafka_mongo_pipeline.utils import get_logger
 
 log = get_logger(__name__)
 
@@ -179,7 +179,6 @@ class EventDeserializer:
             raw_value=message.value,
             error_type=error_type,
             error_message=error_message,
-            ingested_at=datetime.now(tz=UTC),
         )
     
     @staticmethod
@@ -197,6 +196,7 @@ class EventDeserializer:
             raise ValueError(
                 f"Message too short to contain Apicurio header: {len(value)} bytes"
             )
+        
         magic = value[0]
         if magic != _APICURIO_MAGIC_BYTE:
             raise ValueError(

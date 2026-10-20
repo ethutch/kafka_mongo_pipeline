@@ -72,8 +72,6 @@ def test_order_event_to_mongo_doc_exact_output(us_order_event: OrderEvent) -> No
         "updatedAt": datetime(2026, 5, 28, 12, 24, 52, 144000, tzinfo=UTC),
         "_meta": {
             "topic": "order-events",
-            "partition": 0,
-            "offset": 5000,
             # "ingestedAt": datetime(2026, 6, 7, 17, 52, 52, 88423, tzinfo=UTC),
         }
     }

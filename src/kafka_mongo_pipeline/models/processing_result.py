@@ -2,12 +2,19 @@
 from datetime import UTC, datetime
 from typing import Any
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
+from pydantic.alias_generators import to_camel
 
 
 class ProcessingResult(BaseModel):
     """Interface for all processing outcomes"""
-    
+
+    model_config = ConfigDict(
+        populate_by_name=True,
+        alias_generator=to_camel,
+    ) 
+
+
     kafka_topic: str
     kafka_partition: int
     kafka_offset: int
@@ -25,12 +32,15 @@ class ProcessingResult(BaseModel):
 
     def to_mongo_doc(self) -> dict[str, Any]:
         """Serialize the event using aliases and bundle Kafka metadata."""
-        document = self.model_dump(by_alias=True)
+        
+        document = self.model_dump(
+            by_alias=True,
+            exclude_none=True,
+            exclude={"kafka_partition", "kafka_offset",},
+        )
 
         document["_meta"] = {
             "topic": document.pop("kafkaTopic"),
-            "partition": document.pop("kafkaPartition"),
-            "offset": document.pop("kafkaOffset"),
             "ingestedAt": document.pop("ingestedAt"),
         }
 

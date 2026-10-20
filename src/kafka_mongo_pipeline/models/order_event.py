@@ -37,11 +37,6 @@ class OrderDetail(BaseModel):
 class OrderEvent(ProcessingResult):
     """Domain wrapper for OrderEventMessage with Kafka and Mongo capabilities."""
 
-    model_config = ConfigDict(
-        populate_by_name=True,
-        alias_generator=to_camel,
-    ) 
-
     correlation_id: str = Field(
         default="", 
         description="Unique identifier for the event"

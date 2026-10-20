@@ -12,8 +12,8 @@ def us_customer_event() -> CustomerEvent:
         kafka_topic="customer-events",
         kafka_partition=0,
         kafka_offset=5000,
-        ingested_at=datetime(2026, 6, 7, 14, 13, 13, 681735, tzinfo=UTC),
         correlation_id="3dde64c1-ad87-47eb-85bc-ad19ae796ce0",
+        ingested_at=datetime(2026, 6, 7, 17, 52, 52, 88423, tzinfo=timezone.utc),
         action="CREATE",
         customer_id="ACME_001",
         company_name="Acme Corporation",
@@ -59,9 +59,7 @@ def test_to_mongo_doc_exact_output(us_customer_event: CustomerEvent) -> None:
         "updatedAt": datetime(2026, 5, 28, 12, 24, 52, 144000, tzinfo=timezone.utc),
         "_meta": {
             "topic": "customer-events",
-            "partition": 0,
-            "offset": 5000,
-            "ingestedAt": datetime(2026, 6, 7, 14, 13, 13, 681735, tzinfo=timezone.utc),
+            "ingestedAt": datetime(2026, 6, 7, 17, 52, 52, 88423, tzinfo=timezone.utc),
         }
     }
 

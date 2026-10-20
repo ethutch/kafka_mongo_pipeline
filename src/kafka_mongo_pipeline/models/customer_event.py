@@ -2,17 +2,14 @@ from __future__ import annotations
 
 from datetime import datetime
 
-from pydantic import ConfigDict, Field
-from pydantic.alias_generators import to_camel
+from pydantic import Field
 
 from kafka_mongo_pipeline.models.processing_result import ProcessingResult
 
 
 class CustomerEvent(ProcessingResult):
-    model_config = ConfigDict(
-           populate_by_name=True,
-           alias_generator=to_camel,
-       ) 
+    """Domain wrapper for CustomerEventMessage with Kafka and Mongo capabilities."""
+
     correlation_id: str = Field(
         default="", 
         description="Unique identifier for the event"

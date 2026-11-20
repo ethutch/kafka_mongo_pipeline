@@ -40,7 +40,8 @@ ENV KAFKA_BOOTSTRAP_SERVERS=localhost:9092 \
     MONGODB_CONNECT_TIMEOUT_MS=1000 \
     DEAD_LETTER_TOPIC=northwind-elt-events-dlq \
     SUPPORTED_CUSTOMER_EVENTS=4,9 \
-    SUPPORTED_ORDER_EVENTS=7
+    SUPPORTED_ORDER_EVENTS=7 \
+    AWS_SERVICES=http://host.docker.internal:4566
 
 RUN pytest -vv --tb=long
 

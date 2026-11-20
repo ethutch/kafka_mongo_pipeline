@@ -70,6 +70,7 @@ class AppSettings(BaseSettings):
     supported_customer_events: Annotated[list[int], NoDecode] | None = None
     supported_order_events: Annotated[list[int], NoDecode] | None = None
     dead_letter_topic: str = "northwind.etl.events.dlq"
+    aws_services: str
 
     # Composed sub-settings
     kafka: KafkaSettings = Field(default_factory=KafkaSettings) # type: ignore[arg-type]

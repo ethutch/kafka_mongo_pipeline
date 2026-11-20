@@ -27,6 +27,7 @@ config:
   deadLetterTopic: northwind.elt.events.dlq
   supportedCustomerEvents: "[4,9]"
   supportedOrderEvents: "[7]"
+  awsServices: "http://host.docker.internal:4566"
   kafka:
     bootstrapServers: host.docker.internal:9092
     topics: customer-events,order-events

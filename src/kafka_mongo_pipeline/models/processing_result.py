@@ -34,15 +34,15 @@ class ProcessingResult(BaseModel):
         """Serialize the event using aliases and bundle Kafka metadata."""
         
         document = self.model_dump(
-            by_alias=True,
+            by_alias=False,
             exclude_none=True,
             exclude={"kafka_partition", "kafka_offset",},
         )
 
         document["_meta"] = {
-            "topic": document.pop("kafkaTopic"),
-            "ingestedAt": document.pop("ingestedAt"),
+            "topic": document.pop("kafka_topic"),
+            "ingestedAt": document.pop("ingested_at"),
         }
 
-        document["_id"] = document.pop("correlationId")
+        document["_id"] = document.pop("correlation_id")
         return document
